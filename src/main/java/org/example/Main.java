@@ -1,5 +1,10 @@
 package org.example;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import com.pi4j.Pi4J;
 import com.pi4j.boardinfo.util.BoardInfoHelper;
 import com.pi4j.io.gpio.digital.DigitalInput;
@@ -15,6 +20,9 @@ public class Main {
 
     private static int pressCount = 0;
 
+    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/deine_datenbank";
+    private static final String JDBC_USER = "dein_benutzer";
+    private static final String JDBC_PASSWORD = "dein_passwort";
     /**
      * This application blinks a led and counts the number the button is pressed. The blink speed increases with each
      * button press, and after 5 presses the application finishes.
@@ -23,6 +31,24 @@ public class Main {
      * @throws java.lang.Exception if any.
      */
     public static void main(String[] args) throws Exception {
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // 1. JDBC-Treiber laden (optional ab JDBC 4.0)
+            // Class.forName("org.postgresql.Driver");
+
+            // 2. Verbindung zur Datenbank herstellen
+            connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+            System.out.println("Verbindung zur Datenbank hergestellt!");
+
+        } catch (SQLException e) {
+            System.err.println("Datenbank-Fehler aufgetreten: " + e.getMessage());
+        }
+
+
         // Create Pi4J console wrapper/helper
         // (This is a utility class to abstract some of the boilerplate stdin/stdout code)
         final var console = new Console();
@@ -109,7 +135,7 @@ public class Main {
         // OPTIONAL: print the registry
         //PrintInfo.printRegistry(console, pi4j);
 
-        while (pressCount < 5) {
+        while (true) {
             if (led.state() == DigitalState.HIGH) {
                 console.println("LED low");
                 led.low();
@@ -132,6 +158,6 @@ public class Main {
         // is returned to the system.
 
         // Shutdown Pi4J
-        pi4j.shutdown();
+      //  pi4j.shutdown();
     }
 }
