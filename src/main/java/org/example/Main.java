@@ -24,7 +24,7 @@ public class Main {
     private static final String JDBC_USER = "dein_benutzer";
     private static final String JDBC_PASSWORD = "dein_passwort";
     /**
-     * This application blinks a led and counts the number the button is pressed. The blink speed increases with each
+     * This  application blinks a led and counts the number the button is pressed. The blink speed increases with each
      * button press, and after 5 presses the application finishes.
      *
      * @param args an array of {@link java.lang.String} objects.
